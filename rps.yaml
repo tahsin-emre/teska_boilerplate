@@ -1,0 +1,5 @@
+scripts:
+  pub_reload: flutter clean && flutter pub get
+  build_runner: dart run build_runner build --delete-conflicting-outputs
+  build_watch: dart run build_runner watch --delete-conflicting-outputs
+  lang: dart run easy_localization:generate -O lib/product/init/localization -f keys -o locale_keys.g.dart --source-dir assets/localization

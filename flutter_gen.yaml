@@ -1,0 +1,7 @@
+flutter_gen:
+  output: lib/product/gen/
+  line_length: 80
+
+  integrations:
+    flutter_svg: true
+    lottie: true

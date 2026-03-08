@@ -1,0 +1,11 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+linter:
+  rules:
+    public_member_api_docs: false
+analyzer:
+  errors:
+    document_ignores: ignore
+    library_private_types_in_public_api: ignore
+    use_setters_to_change_properties: ignore
+  exclude: [lib/**.g.dart, pubspec.yaml, lib/**.freezed.dart]

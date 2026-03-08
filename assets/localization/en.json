@@ -1,0 +1,13 @@
+{
+    "common": {
+        "yes": "Yes",
+        "no": "No",
+        "confirm": "Confirm",
+        "ok": "OK",
+        "cancel": "Cancel",
+        "close": "Close"
+    },
+    "splash": {
+        "welcome": "Welcome to Teska Boilerplate!"
+    }
+}
