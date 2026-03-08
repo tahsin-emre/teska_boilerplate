@@ -25,6 +25,7 @@ lib/
 │   │   ├── di/                        # GetIt service locator
 │   │   ├── router/                    # GoRouter + typed routes
 │   │   ├── theme/                     # Light/dark themes, colors, color scheme
+│   │   ├── env/                       # Environment config (envied + .env files)
 │   │   ├── network/                   # Dio client, interceptors, models
 │   │   ├── localization/              # EasyLocalization config + generated keys
 │   │   └── guard/                     # App initialization guard for routing
@@ -37,7 +38,6 @@ lib/
 │   │   └── preview/                  # Device preview (dev only)
 │   ├── utils/
 │   │   ├── constants/                 # Sizes, paddings, radius, API config
-│   │   ├── enums/                     # App environment (dev/prod)
 │   │   ├── extensions/               # Context, widget, color extensions
 │   │   └── helpers/                   # Scroll behavior, etc.
 │   ├── widget/                        # Shared widgets
@@ -63,7 +63,7 @@ feature/
 
 The `product/` directory is the shared kernel. Features depend on it; it depends on nothing in `feature/`.
 
-- **`init/`** — One-time setup: DI container, router, theme, network client, localization, guards.
+- **`init/`** — One-time setup: DI container, router, theme, network client, localization, guards, environment configuration.
 - **`packages/`** — Wrapper classes isolating third-party dependencies. Swap implementations without touching feature code.
 - **`utils/`** — Constants, extensions, helpers used across features.
 
@@ -99,6 +99,24 @@ rps lang             # generate localization keys
 
 ### Environment
 
+Environment variables are managed via [envied](https://pub.dev/packages/envied) with `.env` files. Values are obfuscated in the compiled binary for security.
+
+```
+.env.dev          # Development environment variables
+.env.prod         # Production environment variables
+.env.example      # Template for required variables (committed to git)
+```
+
+```
+lib/product/init/env/
+├── env_model.dart          # Abstract contract — all env variables defined here
+├── app_environment.dart    # Enum: resolves current env + provides EnvModel
+├── dev_env.dart            # Reads .env.dev via envied (obfuscated)
+├── prod_env.dart           # Reads .env.prod via envied (obfuscated)
+├── dev_env.g.dart          # Generated
+└── prod_env.g.dart         # Generated
+```
+
 Set the environment at build time:
 
 ```bash
@@ -107,7 +125,28 @@ flutter run --dart-define=ENV=prod
 flutter run --dart-define=VERSION=101
 ```
 
-`AppEnvironment.current` resolves the active environment. API base URLs, device preview, and other flags switch accordingly.
+Access env values anywhere:
+
+```dart
+AppEnvironment.current.envModel.baseUrl;   // environment-aware base URL
+AppEnvironment.current.isDev;              // environment check
+AppEnvironment.current.displayName;        // "Development" / "Production"
+```
+
+**Adding a new variable:**
+
+1. Add `KEY=VALUE` to `.env.dev` and `.env.prod`
+2. Add an abstract getter to `EnvModel`
+3. Add `@EnviedField(varName: 'KEY')` to `DevEnv` and `ProdEnv`
+4. Run `dart run build_runner build`
+
+**Adding a new environment (e.g. staging):**
+
+1. Create `.env.staging`
+2. Create `StagingEnv` class implementing `EnvModel`
+3. Add `staging('.env.staging', 'Staging')` to `AppEnvironment` enum
+4. Add the case to `envModel` getter
+5. Run `dart run build_runner build`
 
 ---
 
@@ -238,6 +277,7 @@ This project relies on code generation for routes, models, localization keys, an
 | `go_router_builder`   | `app_routes.g.dart`     | Typed route classes            |
 | `freezed`             | `*.freezed.dart`        | Immutable state/model classes  |
 | `json_serializable`   | `*.g.dart`              | JSON serialization             |
+| `envied_generator`    | `*_env.g.dart`          | Obfuscated env variable access |
 | `flutter_gen_runner`  | `gen/assets.gen.dart`   | Type-safe asset references     |
 | `easy_localization`   | `locale_keys.g.dart`    | Translation key constants      |
 
@@ -289,6 +329,7 @@ Add a new locale:
 ### Runtime
 | Package                  | Purpose                          |
 |--------------------------|----------------------------------|
+| `envied`                 | Obfuscated .env file reader      |
 | `flutter_bloc`           | State management (Cubit)         |
 | `get_it`                 | Service locator / DI             |
 | `go_router`              | Declarative routing              |
@@ -311,6 +352,7 @@ Add a new locale:
 | Package                | Purpose                          |
 |------------------------|----------------------------------|
 | `build_runner`         | Code generation orchestrator     |
+| `envied_generator`     | Env variable code generation     |
 | `go_router_builder`    | Typed route generation           |
 | `freezed`              | Immutable class generation       |
 | `json_serializable`    | JSON serialization generation    |

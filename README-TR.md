@@ -21,6 +21,7 @@ lib/
 │   │   ├── di/                        # GetIt service locator
 │   │   ├── router/                    # GoRouter + typed route'lar
 │   │   ├── theme/                     # Light/dark tema, renkler, color scheme
+│   │   ├── env/                       # Ortam yapılandırması (envied + .env dosyaları)
 │   │   ├── network/                   # Dio client, interceptor'lar, modeller
 │   │   ├── localization/              # EasyLocalization yapılandırması + üretilen key'ler
 │   │   └── guard/                     # Routing için uygulama başlatma guard'ı
@@ -33,7 +34,6 @@ lib/
 │   │   └── preview/                  # Device preview (sadece dev)
 │   ├── utils/
 │   │   ├── constants/                 # Size'lar, padding'ler, radius, API yapılandırması
-│   │   ├── enums/                     # Uygulama ortamı (dev/prod)
 │   │   ├── extensions/               # Context, widget, color extension'ları
 │   │   └── helpers/                   # Scroll davranışı vb.
 │   ├── widget/                        # Paylaşılan widget'lar
@@ -59,7 +59,7 @@ feature/
 
 `product/` dizini paylaşılan çekirdektir. Feature'lar ona bağlıdır; o `feature/` içindeki hiçbir şeye bağlı değildir.
 
-- **`init/`** — Tek seferlik kurulum: DI container, router, tema, network client, lokalizasyon, guard'lar.
+- **`init/`** — Tek seferlik kurulum: DI container, router, tema, network client, lokalizasyon, guard'lar, ortam yapılandırması.
 - **`packages/`** — Üçüncü parti bağımlılıkları izole eden wrapper sınıflar. Feature koduna dokunmadan implementasyon değiştirilebilir.
 - **`utils/`** — Feature'lar arasında kullanılan sabitler, extension'lar, helper'lar.
 
@@ -95,6 +95,24 @@ rps lang             # lokalizasyon key'lerini üret
 
 ### Ortam
 
+Ortam değişkenleri [envied](https://pub.dev/packages/envied) paketi ile `.env` dosyaları üzerinden yönetilir. Değerler güvenlik için derlenmiş binary'de obfuscate edilir.
+
+```
+.env.dev          # Development ortam değişkenleri
+.env.prod         # Production ortam değişkenleri
+.env.example      # Gerekli değişkenler için şablon (git'e dahil)
+```
+
+```
+lib/product/init/env/
+├── env_model.dart          # Abstract contract — tüm env değişkenleri burada tanımlanır
+├── app_environment.dart    # Enum: aktif ortamı çözümler + EnvModel sağlar
+├── dev_env.dart            # .env.dev dosyasını envied ile okur (obfuscated)
+├── prod_env.dart           # .env.prod dosyasını envied ile okur (obfuscated)
+├── dev_env.g.dart          # Üretilen dosya
+└── prod_env.g.dart         # Üretilen dosya
+```
+
 Ortamı derleme zamanında ayarlayın:
 
 ```bash
@@ -103,7 +121,28 @@ flutter run --dart-define=ENV=prod
 flutter run --dart-define=VERSION=101
 ```
 
-`AppEnvironment.current` aktif ortamı çözümler. API base URL'leri, device preview ve diğer flag'ler buna göre değişir.
+Env değerlerine her yerden erişim:
+
+```dart
+AppEnvironment.current.envModel.baseUrl;   // ortama göre doğru base URL
+AppEnvironment.current.isDev;              // ortam kontrolü
+AppEnvironment.current.displayName;        // "Development" / "Production"
+```
+
+**Yeni değişken ekleme:**
+
+1. `.env.dev` ve `.env.prod` dosyalarına `KEY=VALUE` ekleyin
+2. `EnvModel`'e abstract getter ekleyin
+3. `DevEnv` ve `ProdEnv`'e `@EnviedField(varName: 'KEY')` ile implement edin
+4. `dart run build_runner build` çalıştırın
+
+**Yeni ortam ekleme (örn. staging):**
+
+1. `.env.staging` dosyası oluşturun
+2. `EnvModel`'i implement eden `StagingEnv` sınıfı yazın
+3. `AppEnvironment` enum'una `staging('.env.staging', 'Staging')` ekleyin
+4. `envModel` getter'ına case ekleyin
+5. `dart run build_runner build` çalıştırın
 
 ---
 
@@ -234,6 +273,7 @@ Bu proje route'lar, modeller, lokalizasyon key'leri ve asset referansları için
 | `go_router_builder`     | `app_routes.g.dart`     | Typed route sınıfları          |
 | `freezed`               | `*.freezed.dart`        | Immutable state/model sınıfları|
 | `json_serializable`     | `*.g.dart`              | JSON serializasyon             |
+| `envied_generator`      | `*_env.g.dart`          | Obfuscated env değişken erişimi|
 | `flutter_gen_runner`    | `gen/assets.gen.dart`   | Type-safe asset referansları   |
 | `easy_localization`     | `locale_keys.g.dart`    | Çeviri key sabitleri           |
 
@@ -285,6 +325,7 @@ Yeni dil ekleme:
 ### Runtime
 | Paket                    | Amaç                            |
 |--------------------------|----------------------------------|
+| `envied`                 | Obfuscated .env dosya okuyucu    |
 | `flutter_bloc`           | State yönetimi (Cubit)           |
 | `get_it`                 | Service locator / DI             |
 | `go_router`              | Deklaratif routing               |
@@ -307,6 +348,7 @@ Yeni dil ekleme:
 | Paket                  | Amaç                            |
 |------------------------|----------------------------------|
 | `build_runner`         | Kod üretim orkestratörü          |
+| `envied_generator`     | Env değişken kod üretimi         |
 | `go_router_builder`    | Typed route üretimi              |
 | `freezed`              | Immutable sınıf üretimi          |
 | `json_serializable`    | JSON serializasyon üretimi       |

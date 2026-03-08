@@ -1,6 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:teska_boilerplate/product/utils/enums/app_environment.dart';
+import 'package:teska_boilerplate/product/init/env/app_environment.dart';
 
 final class PreviewManager extends StatelessWidget {
   const PreviewManager({required this.child, super.key});

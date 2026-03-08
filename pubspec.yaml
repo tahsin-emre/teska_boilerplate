@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter  
   
   # Core
+  envied: ^1.3.3
   web: ^1.1.1
   get_it: ^9.1.1
   json_annotation: ^4.9.0
@@ -42,6 +43,7 @@ dev_dependencies:
     sdk: flutter
   flutter_gen_runner: ^5.13.0
   very_good_analysis: ^10.0.0
+  envied_generator: ^1.3.3
   build_runner: ^2.10.4
   go_router_builder: ^4.2.0
   json_serializable: ^6.11.2
