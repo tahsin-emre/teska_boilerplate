@@ -7,18 +7,18 @@ import 'package:teska_boilerplate/product/init/session/model/device_model.dart';
 import 'package:teska_boilerplate/product/init/session/model/user_model.dart';
 import 'package:teska_boilerplate/product/init/session/session_state.dart';
 import 'package:teska_boilerplate/product/packages/logger/custom_logger.dart';
+import 'package:teska_boilerplate/product/packages/storage/shared_keys.dart';
 import 'package:web/web.dart' as web;
 
 final class SessionCubit extends Cubit<SessionState> {
   SessionCubit() : super(const SessionState());
 
-  /// Restores session from secure storage (call on app start).
   Future<void> restoreSession() async {
     emit(state.copyWith(isLoading: true));
 
     try {
       final token = await BC.tokenStorageManager.getToken();
-      final userJson = await BC.sharedManager.getString('session_user');
+      final userJson = await BC.sharedManager.getString(SharedKeys.sessionUser);
       final device = _collectDeviceInfo();
 
       UserModel? user;
@@ -43,14 +43,13 @@ final class SessionCubit extends Cubit<SessionState> {
     }
   }
 
-  /// Starts a new session after successful login.
   Future<void> login({
     required String token,
     required UserModel user,
   }) async {
     await BC.tokenStorageManager.saveToken(token);
     await BC.sharedManager.setString(
-      'session_user',
+      SharedKeys.sessionUser,
       jsonEncode(user.toJson()),
     );
 
@@ -63,26 +62,23 @@ final class SessionCubit extends Cubit<SessionState> {
     );
   }
 
-  /// Updates the current user data.
   Future<void> updateUser(UserModel user) async {
     await BC.sharedManager.setString(
-      'session_user',
+      SharedKeys.sessionUser,
       jsonEncode(user.toJson()),
     );
     emit(state.copyWith(user: user));
   }
 
-  /// Clears session and logs out.
   Future<void> logout() async {
     await BC.tokenStorageManager.clearToken();
-    await BC.sharedManager.remove('session_user');
+    await BC.sharedManager.remove(SharedKeys.sessionUser);
 
     emit(
       const SessionState(),
     );
   }
 
-  /// Collects device/browser information.
   DeviceModel _collectDeviceInfo() {
     if (kIsWeb) {
       final navigator = web.window.navigator;

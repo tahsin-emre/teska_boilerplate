@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:teska_boilerplate/product/packages/storage/shared_keys.dart';
 import 'package:teska_boilerplate/product/packages/storage/storage_manager.dart';
 
 /// Secure shared preferences manager using FlutterSecureStorage.
@@ -9,54 +10,54 @@ import 'package:teska_boilerplate/product/packages/storage/storage_manager.dart'
 final class SharedManager extends StorageManager {
   static const _prefix = '__shared_';
 
-  String _key(String key) => '$_prefix$key';
+  String _key(SharedKeys key) => '$_prefix${key.value}';
 
   // String
-  Future<void> setString(String key, String value) async {
+  Future<void> setString(SharedKeys key, String value) async {
     await storage.write(key: _key(key), value: value);
   }
 
-  Future<String?> getString(String key) async {
+  Future<String?> getString(SharedKeys key) async {
     return storage.read(key: _key(key));
   }
 
   // int
-  Future<void> setInt(String key, int value) async {
+  Future<void> setInt(SharedKeys key, int value) async {
     await storage.write(key: _key(key), value: value.toString());
   }
 
-  Future<int?> getInt(String key) async {
+  Future<int?> getInt(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     return value != null ? int.tryParse(value) : null;
   }
 
   // double
-  Future<void> setDouble(String key, double value) async {
+  Future<void> setDouble(SharedKeys key, double value) async {
     await storage.write(key: _key(key), value: value.toString());
   }
 
-  Future<double?> getDouble(String key) async {
+  Future<double?> getDouble(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     return value != null ? double.tryParse(value) : null;
   }
 
   // bool
-  Future<void> setBool(String key, {required bool value}) async {
+  Future<void> setBool(SharedKeys key, {required bool value}) async {
     await storage.write(key: _key(key), value: value.toString());
   }
 
-  Future<bool?> getBool(String key) async {
+  Future<bool?> getBool(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     if (value == null) return null;
     return value == 'true';
   }
 
   // List<String>
-  Future<void> setStringList(String key, List<String> value) async {
+  Future<void> setStringList(SharedKeys key, List<String> value) async {
     await storage.write(key: _key(key), value: jsonEncode(value));
   }
 
-  Future<List<String>?> getStringList(String key) async {
+  Future<List<String>?> getStringList(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     if (value == null) return null;
     final decoded = jsonDecode(value) as List<dynamic>;
@@ -64,23 +65,23 @@ final class SharedManager extends StorageManager {
   }
 
   // JSON Map
-  Future<void> setJson(String key, Map<String, dynamic> value) async {
+  Future<void> setJson(SharedKeys key, Map<String, dynamic> value) async {
     await storage.write(key: _key(key), value: jsonEncode(value));
   }
 
-  Future<Map<String, dynamic>?> getJson(String key) async {
+  Future<Map<String, dynamic>?> getJson(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     if (value == null) return null;
     return jsonDecode(value) as Map<String, dynamic>;
   }
 
   // Remove
-  Future<void> remove(String key) async {
+  Future<void> remove(SharedKeys key) async {
     await storage.delete(key: _key(key));
   }
 
   // Contains
-  Future<bool> containsKey(String key) async {
+  Future<bool> containsKey(SharedKeys key) async {
     final value = await storage.read(key: _key(key));
     return value != null;
   }
