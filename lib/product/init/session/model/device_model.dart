@@ -6,11 +6,19 @@ part 'device_model.g.dart';
 @freezed
 abstract class DeviceModel with _$DeviceModel {
   const factory DeviceModel({
+    // Common
     String? platform,
+    String? deviceName,
+    String? osVersion,
+    String? screenResolution,
+    // Web
     String? browserName,
     String? userAgent,
     String? language,
-    String? screenResolution,
+    // Mobile
+    String? brand,
+    String? model,
+    String? appVersion,
   }) = _DeviceModel;
 
   factory DeviceModel.fromJson(Map<String, dynamic> json) =>

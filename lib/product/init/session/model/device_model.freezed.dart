@@ -15,7 +15,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DeviceModel {
 
- String? get platform; String? get browserName; String? get userAgent; String? get language; String? get screenResolution;
+// Common
+ String? get platform; String? get deviceName; String? get osVersion; String? get screenResolution;// Web
+ String? get browserName; String? get userAgent; String? get language;// Mobile
+ String? get brand; String? get model; String? get appVersion;
 /// Create a copy of DeviceModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +31,16 @@ $DeviceModelCopyWith<DeviceModel> get copyWith => _$DeviceModelCopyWithImpl<Devi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeviceModel&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.browserName, browserName) || other.browserName == browserName)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.language, language) || other.language == language)&&(identical(other.screenResolution, screenResolution) || other.screenResolution == screenResolution));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeviceModel&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName)&&(identical(other.osVersion, osVersion) || other.osVersion == osVersion)&&(identical(other.screenResolution, screenResolution) || other.screenResolution == screenResolution)&&(identical(other.browserName, browserName) || other.browserName == browserName)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.language, language) || other.language == language)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.model, model) || other.model == model)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,platform,browserName,userAgent,language,screenResolution);
+int get hashCode => Object.hash(runtimeType,platform,deviceName,osVersion,screenResolution,browserName,userAgent,language,brand,model,appVersion);
 
 @override
 String toString() {
-  return 'DeviceModel(platform: $platform, browserName: $browserName, userAgent: $userAgent, language: $language, screenResolution: $screenResolution)';
+  return 'DeviceModel(platform: $platform, deviceName: $deviceName, osVersion: $osVersion, screenResolution: $screenResolution, browserName: $browserName, userAgent: $userAgent, language: $language, brand: $brand, model: $model, appVersion: $appVersion)';
 }
 
 
@@ -48,7 +51,7 @@ abstract mixin class $DeviceModelCopyWith<$Res>  {
   factory $DeviceModelCopyWith(DeviceModel value, $Res Function(DeviceModel) _then) = _$DeviceModelCopyWithImpl;
 @useResult
 $Res call({
- String? platform, String? browserName, String? userAgent, String? language, String? screenResolution
+ String? platform, String? deviceName, String? osVersion, String? screenResolution, String? browserName, String? userAgent, String? language, String? brand, String? model, String? appVersion
 });
 
 
@@ -65,13 +68,18 @@ class _$DeviceModelCopyWithImpl<$Res>
 
 /// Create a copy of DeviceModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? platform = freezed,Object? browserName = freezed,Object? userAgent = freezed,Object? language = freezed,Object? screenResolution = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? platform = freezed,Object? deviceName = freezed,Object? osVersion = freezed,Object? screenResolution = freezed,Object? browserName = freezed,Object? userAgent = freezed,Object? language = freezed,Object? brand = freezed,Object? model = freezed,Object? appVersion = freezed,}) {
   return _then(_self.copyWith(
 platform: freezed == platform ? _self.platform : platform // ignore: cast_nullable_to_non_nullable
+as String?,deviceName: freezed == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String?,osVersion: freezed == osVersion ? _self.osVersion : osVersion // ignore: cast_nullable_to_non_nullable
+as String?,screenResolution: freezed == screenResolution ? _self.screenResolution : screenResolution // ignore: cast_nullable_to_non_nullable
 as String?,browserName: freezed == browserName ? _self.browserName : browserName // ignore: cast_nullable_to_non_nullable
 as String?,userAgent: freezed == userAgent ? _self.userAgent : userAgent // ignore: cast_nullable_to_non_nullable
 as String?,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
-as String?,screenResolution: freezed == screenResolution ? _self.screenResolution : screenResolution // ignore: cast_nullable_to_non_nullable
+as String?,brand: freezed == brand ? _self.brand : brand // ignore: cast_nullable_to_non_nullable
+as String?,model: freezed == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
+as String?,appVersion: freezed == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -157,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? platform,  String? browserName,  String? userAgent,  String? language,  String? screenResolution)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? platform,  String? deviceName,  String? osVersion,  String? screenResolution,  String? browserName,  String? userAgent,  String? language,  String? brand,  String? model,  String? appVersion)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DeviceModel() when $default != null:
-return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,_that.screenResolution);case _:
+return $default(_that.platform,_that.deviceName,_that.osVersion,_that.screenResolution,_that.browserName,_that.userAgent,_that.language,_that.brand,_that.model,_that.appVersion);case _:
   return orElse();
 
 }
@@ -178,10 +186,10 @@ return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? platform,  String? browserName,  String? userAgent,  String? language,  String? screenResolution)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? platform,  String? deviceName,  String? osVersion,  String? screenResolution,  String? browserName,  String? userAgent,  String? language,  String? brand,  String? model,  String? appVersion)  $default,) {final _that = this;
 switch (_that) {
 case _DeviceModel():
-return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,_that.screenResolution);case _:
+return $default(_that.platform,_that.deviceName,_that.osVersion,_that.screenResolution,_that.browserName,_that.userAgent,_that.language,_that.brand,_that.model,_that.appVersion);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +206,10 @@ return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? platform,  String? browserName,  String? userAgent,  String? language,  String? screenResolution)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? platform,  String? deviceName,  String? osVersion,  String? screenResolution,  String? browserName,  String? userAgent,  String? language,  String? brand,  String? model,  String? appVersion)?  $default,) {final _that = this;
 switch (_that) {
 case _DeviceModel() when $default != null:
-return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,_that.screenResolution);case _:
+return $default(_that.platform,_that.deviceName,_that.osVersion,_that.screenResolution,_that.browserName,_that.userAgent,_that.language,_that.brand,_that.model,_that.appVersion);case _:
   return null;
 
 }
@@ -213,14 +221,22 @@ return $default(_that.platform,_that.browserName,_that.userAgent,_that.language,
 @JsonSerializable()
 
 class _DeviceModel implements DeviceModel {
-  const _DeviceModel({this.platform, this.browserName, this.userAgent, this.language, this.screenResolution});
+  const _DeviceModel({this.platform, this.deviceName, this.osVersion, this.screenResolution, this.browserName, this.userAgent, this.language, this.brand, this.model, this.appVersion});
   factory _DeviceModel.fromJson(Map<String, dynamic> json) => _$DeviceModelFromJson(json);
 
+// Common
 @override final  String? platform;
+@override final  String? deviceName;
+@override final  String? osVersion;
+@override final  String? screenResolution;
+// Web
 @override final  String? browserName;
 @override final  String? userAgent;
 @override final  String? language;
-@override final  String? screenResolution;
+// Mobile
+@override final  String? brand;
+@override final  String? model;
+@override final  String? appVersion;
 
 /// Create a copy of DeviceModel
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeviceModel&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.browserName, browserName) || other.browserName == browserName)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.language, language) || other.language == language)&&(identical(other.screenResolution, screenResolution) || other.screenResolution == screenResolution));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeviceModel&&(identical(other.platform, platform) || other.platform == platform)&&(identical(other.deviceName, deviceName) || other.deviceName == deviceName)&&(identical(other.osVersion, osVersion) || other.osVersion == osVersion)&&(identical(other.screenResolution, screenResolution) || other.screenResolution == screenResolution)&&(identical(other.browserName, browserName) || other.browserName == browserName)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.language, language) || other.language == language)&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.model, model) || other.model == model)&&(identical(other.appVersion, appVersion) || other.appVersion == appVersion));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,platform,browserName,userAgent,language,screenResolution);
+int get hashCode => Object.hash(runtimeType,platform,deviceName,osVersion,screenResolution,browserName,userAgent,language,brand,model,appVersion);
 
 @override
 String toString() {
-  return 'DeviceModel(platform: $platform, browserName: $browserName, userAgent: $userAgent, language: $language, screenResolution: $screenResolution)';
+  return 'DeviceModel(platform: $platform, deviceName: $deviceName, osVersion: $osVersion, screenResolution: $screenResolution, browserName: $browserName, userAgent: $userAgent, language: $language, brand: $brand, model: $model, appVersion: $appVersion)';
 }
 
 
@@ -255,7 +271,7 @@ abstract mixin class _$DeviceModelCopyWith<$Res> implements $DeviceModelCopyWith
   factory _$DeviceModelCopyWith(_DeviceModel value, $Res Function(_DeviceModel) _then) = __$DeviceModelCopyWithImpl;
 @override @useResult
 $Res call({
- String? platform, String? browserName, String? userAgent, String? language, String? screenResolution
+ String? platform, String? deviceName, String? osVersion, String? screenResolution, String? browserName, String? userAgent, String? language, String? brand, String? model, String? appVersion
 });
 
 
@@ -272,13 +288,18 @@ class __$DeviceModelCopyWithImpl<$Res>
 
 /// Create a copy of DeviceModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? platform = freezed,Object? browserName = freezed,Object? userAgent = freezed,Object? language = freezed,Object? screenResolution = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? platform = freezed,Object? deviceName = freezed,Object? osVersion = freezed,Object? screenResolution = freezed,Object? browserName = freezed,Object? userAgent = freezed,Object? language = freezed,Object? brand = freezed,Object? model = freezed,Object? appVersion = freezed,}) {
   return _then(_DeviceModel(
 platform: freezed == platform ? _self.platform : platform // ignore: cast_nullable_to_non_nullable
+as String?,deviceName: freezed == deviceName ? _self.deviceName : deviceName // ignore: cast_nullable_to_non_nullable
+as String?,osVersion: freezed == osVersion ? _self.osVersion : osVersion // ignore: cast_nullable_to_non_nullable
+as String?,screenResolution: freezed == screenResolution ? _self.screenResolution : screenResolution // ignore: cast_nullable_to_non_nullable
 as String?,browserName: freezed == browserName ? _self.browserName : browserName // ignore: cast_nullable_to_non_nullable
 as String?,userAgent: freezed == userAgent ? _self.userAgent : userAgent // ignore: cast_nullable_to_non_nullable
 as String?,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
-as String?,screenResolution: freezed == screenResolution ? _self.screenResolution : screenResolution // ignore: cast_nullable_to_non_nullable
+as String?,brand: freezed == brand ? _self.brand : brand // ignore: cast_nullable_to_non_nullable
+as String?,model: freezed == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
+as String?,appVersion: freezed == appVersion ? _self.appVersion : appVersion // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

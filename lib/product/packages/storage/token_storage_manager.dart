@@ -1,6 +1,10 @@
 import 'package:teska_boilerplate/product/packages/storage/storage_manager.dart';
 
 final class TokenStorageManager extends StorageManager {
+  TokenStorageManager._init();
+  static final TokenStorageManager _instance = TokenStorageManager._init();
+  static TokenStorageManager get instance => _instance;
+
   static const _keyToken = '__secure_t';
 
   Future<void> saveToken(String token) async {

@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:teska_boilerplate/feature/splash/cubit/splash_cubit.dart';
 import 'package:teska_boilerplate/product/init/network/network_manager.dart';
 import 'package:teska_boilerplate/product/init/session/session_cubit.dart';
+import 'package:teska_boilerplate/product/packages/device/device_manager.dart';
 import 'package:teska_boilerplate/product/packages/storage/shared_manager.dart';
 import 'package:teska_boilerplate/product/packages/storage/token_storage_manager.dart';
 
@@ -16,26 +17,31 @@ final class BaseContainer {
   static void setupLocator() {
     _di
       //
+      // Device Manager
+      ..registerLazySingleton(() => DeviceManager.instance)
+      //
       // Shared Manager
-      ..registerLazySingleton<SharedManager>(SharedManager.new)
+      ..registerLazySingleton(() => SharedManager.instance)
       //
       // Token Storage Manager
-      ..registerLazySingleton<TokenStorageManager>(TokenStorageManager.new)
+      ..registerLazySingleton(() => TokenStorageManager.instance)
       //
       // Network Manager
-      ..registerLazySingleton<NetworkManager>(() => NetworkManager.instance)
+      ..registerLazySingleton(() => NetworkManager.instance)
       //
       // Service Repositories
       //
       // Cubits
-      ..registerLazySingleton<SessionCubit>(SessionCubit.new)
-      ..registerLazySingleton<SplashCubit>(SplashCubit.new);
+      ..registerLazySingleton(SessionCubit.new)
+      ..registerLazySingleton(SplashCubit.new);
   }
 
-  static SessionCubit get sessionCubit => _di<SessionCubit>();
+  static DeviceManager get deviceManager => _di<DeviceManager>();
   static SharedManager get sharedManager => _di<SharedManager>();
   static NetworkManager get networkManager => _di<NetworkManager>();
-  static SplashCubit get splashCubit => _di<SplashCubit>();
   static TokenStorageManager get tokenStorageManager =>
       _di<TokenStorageManager>();
+
+  static SessionCubit get sessionCubit => _di<SessionCubit>();
+  static SplashCubit get splashCubit => _di<SplashCubit>();
 }

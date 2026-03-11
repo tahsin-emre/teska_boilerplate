@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teska_boilerplate/product/init/di/base_container.dart';
-import 'package:teska_boilerplate/product/init/session/model/device_model.dart';
 import 'package:teska_boilerplate/product/init/session/model/user_model.dart';
 import 'package:teska_boilerplate/product/init/session/session_state.dart';
 import 'package:teska_boilerplate/product/packages/logger/custom_logger.dart';
 import 'package:teska_boilerplate/product/packages/storage/shared_keys.dart';
-import 'package:web/web.dart' as web;
 
 final class SessionCubit extends Cubit<SessionState> {
   SessionCubit() : super(const SessionState());
@@ -19,7 +16,7 @@ final class SessionCubit extends Cubit<SessionState> {
     try {
       final token = await BC.tokenStorageManager.getToken();
       final userJson = await BC.sharedManager.getString(SharedKeys.sessionUser);
-      final device = _collectDeviceInfo();
+      final device = await BC.deviceManager.collectDeviceInfo();
 
       UserModel? user;
       if (userJson != null) {
@@ -77,30 +74,5 @@ final class SessionCubit extends Cubit<SessionState> {
     emit(
       const SessionState(),
     );
-  }
-
-  DeviceModel _collectDeviceInfo() {
-    if (kIsWeb) {
-      final navigator = web.window.navigator;
-      return DeviceModel(
-        platform: navigator.platform,
-        browserName: _parseBrowserName(navigator.userAgent),
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        screenResolution:
-            '${web.window.screen.width}x${web.window.screen.height}',
-      );
-    }
-    return const DeviceModel(platform: 'unknown');
-  }
-
-  String _parseBrowserName(String userAgent) {
-    final ua = userAgent.toLowerCase();
-    if (ua.contains('edg')) return 'Edge';
-    if (ua.contains('chrome')) return 'Chrome';
-    if (ua.contains('firefox')) return 'Firefox';
-    if (ua.contains('safari')) return 'Safari';
-    if (ua.contains('opera') || ua.contains('opr')) return 'Opera';
-    return 'Unknown';
   }
 }

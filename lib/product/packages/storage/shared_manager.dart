@@ -8,6 +8,9 @@ import 'package:teska_boilerplate/product/packages/storage/storage_manager.dart'
 /// Provides type-safe get/set methods for common data types
 /// (String, int, double, bool, List<String>, JSON Map).
 final class SharedManager extends StorageManager {
+  SharedManager._init();
+  static final SharedManager _instance = SharedManager._init();
+  static SharedManager get instance => _instance;
   static const _prefix = '__shared_';
 
   String _key(SharedKeys key) => '$_prefix${key.value}';
